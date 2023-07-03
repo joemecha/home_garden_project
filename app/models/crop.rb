@@ -1,5 +1,6 @@
 class Crop < ApplicationRecord
-  belongs_to :location
+  has_many :location_crops
+  has_many :locations, through: :location_crops
   has_many :notes
 
   validates :name, presence: true
