@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_07_03_181647) do
+ActiveRecord::Schema[7.0].define(version: 2023_07_03_193429) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -20,10 +20,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_03_181647) do
     t.integer "days_to_maturity", null: false
     t.date "date_planted", null: false
     t.boolean "active"
-    t.bigint "location_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["location_id"], name: "index_crops_on_location_id"
   end
 
   create_table "gardens", force: :cascade do |t|
@@ -31,6 +29,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_03_181647) do
     t.float "size"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "location_crops", force: :cascade do |t|
+    t.bigint "location_id", null: false
+    t.bigint "crop_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["crop_id"], name: "index_location_crops_on_crop_id"
+    t.index ["location_id"], name: "index_location_crops_on_location_id"
   end
 
   create_table "locations", force: :cascade do |t|
@@ -51,7 +58,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_03_181647) do
     t.index ["crop_id"], name: "index_notes_on_crop_id"
   end
 
-  add_foreign_key "crops", "locations"
+  add_foreign_key "location_crops", "crops"
+  add_foreign_key "location_crops", "locations"
   add_foreign_key "locations", "gardens"
   add_foreign_key "notes", "crops"
 end
