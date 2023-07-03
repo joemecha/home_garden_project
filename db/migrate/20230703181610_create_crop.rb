@@ -3,8 +3,8 @@ class CreateCrop < ActiveRecord::Migration[7.0]
     create_table :crops do |t|
       t.string :name, null: false
       t.string :variety
-      t.integer :daysToMaturity, null: false
-      t.date :datePlanted, null: false
+      t.integer :days_to_maturity, null: false
+      t.date :date_planted, null: false
       t.boolean :active
       t.references :location, null: false, foreign_key: true
 
