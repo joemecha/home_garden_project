@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_07_03_193429) do
+ActiveRecord::Schema[7.0].define(version: 2023_07_18_214144) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -29,6 +29,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_03_193429) do
     t.float "size"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "user_id"
+    t.index ["user_id"], name: "index_gardens_on_user_id"
   end
 
   create_table "location_crops", force: :cascade do |t|
@@ -58,6 +60,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_03_193429) do
     t.index ["crop_id"], name: "index_notes_on_crop_id"
   end
 
+  create_table "users", force: :cascade do |t|
+    t.string "email_address"
+    t.string "password_digest"
+    t.string "api_key"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_foreign_key "gardens", "users"
   add_foreign_key "location_crops", "crops"
   add_foreign_key "location_crops", "locations"
   add_foreign_key "locations", "gardens"
