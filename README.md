@@ -1,8 +1,9 @@
-# _Home Garden API - Joe Mecha_
+# _Home Garden Project - Joe Mecha_
+![logo](lib/images/pexels-engin-akyurt-1435904.jpg "Variety of vegetables")
 <!-- ![logo](lib/images/garden_logo.png "Home Garden logo") -->
 
 ## About
-Home Garden API is a RESTful back-end API which exposes data on Locations, Crops, and Days-to-Maturity. 
+Home Garden Project is a RESTful back-end API which exposes data on Locations, Crops, and Days-to-Maturity. 
 
 
 ## Table of contents
@@ -18,7 +19,7 @@ Home Garden API is a RESTful back-end API which exposes data on Locations, Crops
 
 
 ## Developer Notes
-#### The Why's
+
   - `The database design` is a __one-to-many__ relationship between Garden & Locations, and a __many-to-many__ between Locations and Crops.
 
   
@@ -26,7 +27,7 @@ Home Garden API is a RESTful back-end API which exposes data on Locations, Crops
 
   - `Authentication` is achieved through registering a new user, generating a random key, and by having the controllers inherit authenticate methods which are called with a 'before_action' filter. The response returns an `API KEY` __please see SET UP for instructions to generate a key__ 
     - _API KEY IS REQUIRED TO HIT ENDPOINTS_
-    - With _has secure password_ in the User model, an authenticate method is available for checking credentials in a _log in_ action. However, in this case, there is no login/session; an authenticate method is defined in the _base controller_ to check the user/api_key.
+    - With _has secure password_ in the User model, an authenticate method is available for checking credentials in a _log in_ action. However, there is currently no login/session; an authenticate method is defined in the _base controller_ to check the user/api_key.
 
 
 ## Stretch Goals:
@@ -36,8 +37,8 @@ TBD
 
 ## Versions
 
-* Ruby  3.2.2
 * Rails 7.0.6
+* Ruby  3.2.2
 
 
 ## Setup
@@ -66,52 +67,52 @@ The following are all API endpoints. Note, some endpoints have optional or requi
 
 ~ All endpoints run off base connector http://localhost:3000 ~ 
 
-__For endpoints 1-9, send the api_key in the request body or as a query param. Examples:__
+__For endpoints other than create new user, send the api_key in the request body or as a query param. Examples:__
 ```
 {
     "api_key": "a02a9fc29934a6c173aa924961403005"
 }
 ```
 ```
-/api/v1/portfolios?api_key=a02a9fc29934a6c173aa924961403005
+/api/v0/gardens?api_key=a02a9fc29934a6c173aa924961403005
 ```
 
 ### 0 Create new user:
 | Method   | URI                                      | Description                              |
 | -------- | ---------------------------------------- | ---------------------------------------- |
-| `POST`    | `/api/v1/users`     | Register new user and receive API KEY  |
+| `POST`    | `/api/v0/users`     | Register new user and receive API KEY  |
 
 
 ### 1 Retrieve all gardens:
 | Method   | URI                                      | Description                              |
 | -------- | ---------------------------------------- | ---------------------------------------- |
-| `GET`    | `/api/v1/gardens`     | Retrieve all gardens  |
+| `GET`    | `/api/v0/gardens`     | Retrieve all gardens  |
 
 ### 2 Retrieve one garden:
 | Method   | URI                                      | Description                              |
 | -------- | ---------------------------------------- | ---------------------------------------- |
-| `GET`    | `/api/v1/gardens/:id`     | Retrieve a single garden  |
+| `GET`    | `/api/v0/gardens/:id`     | Retrieve a single garden  |
 
 
 ### 3 Retrieve all locations for a garden:
 | Method   | URI                                      | Description                              |
 | -------- | ---------------------------------------- | ---------------------------------------- |
-| `GET`    | `/api/v1/portfolios/:portfolio_id/locations`     | Retrieve all locations for a single garden  |
+| `GET`    | `/api/v0/gardens/:garden_id/locations`     | Retrieve all locations for a single garden  |
 
 ### 4 Retrieve one location for a garden:
 | Method   | URI                                      | Description                              |
 | -------- | ---------------------------------------- | ---------------------------------------- |
-| `GET`    | `/api/v1/gardens/:garden_id/locations/:id`     | Retrieve one location for a single garden  |
+| `GET`    | `/api/v0/gardens/:garden_id/locations/:id`     | Retrieve one location for a single garden  |
 
 ### 5 Retrieve all crops for a location
 | Method   | URI                                      | Description                              |
 | -------- | ---------------------------------------- | ---------------------------------------- |
-| `GET`    | `/api/v1/portfolios/:portfolio_id/locations/:location_id/crops`     | Retrieve all crops for one location  |
+| `GET`    | `/api/v0/gardens/:garden_id/locations/:location_id/crops`     | Retrieve all crops for one location  |
 
 ### 6 Retrieve data for one crop for a location
 | Method   | URI                                      | Description                              |
 | -------- | ---------------------------------------- | ---------------------------------------- |
-| `GET`    | `/api/v1/portfolios/:portfolio_id/locations/:location_id/crops/:id`     | Retrieve one crop for a single location  |
+| `GET`    | `/api/v0/gardens/:garden_id/locations/:location_id/crops/:id`     | Retrieve one crop for a single location  |
 
 
 ## Examples
@@ -119,7 +120,7 @@ __For endpoints 1-9, send the api_key in the request body or as a query param. E
 #### 0 - Create new user and receive API KEY
 _Request_
 ```
-POST /api/v1/users
+POST /api/v0/users
 Content-Type: application/json
 Accept: application/json
 
