@@ -5,6 +5,7 @@ Rails.application.routes.draw do
       resources :locations, only: %i[index show create update]
       resources :crops, only: %i[index show create update destroy]
       resources :notes, only: %i[index show create update destroy]
+      resources :users, only: %i[create]
     end
   end
 end
