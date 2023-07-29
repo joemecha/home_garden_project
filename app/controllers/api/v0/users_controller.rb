@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'securerandom'
 
 class Api::V0::UsersController < ApplicationController
@@ -16,6 +18,6 @@ class Api::V0::UsersController < ApplicationController
   private
 
   def user_params
-    params.permit(:email_address, :password, :password_confirmation)
+    params.require(:user).permit(:email_address, :password, :password_confirmation)
   end
 end
