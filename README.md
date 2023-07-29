@@ -125,6 +125,7 @@ Content-Type: application/json
 Accept: application/json
 
 {
+  "name": "Ohn Scoggins",
   "email_address": "namenamename@example.com",
   "password": "mypassword",
   "password_confirmation": "mypassword"
@@ -140,6 +141,7 @@ body:
     "type": "users",
     "id": "1",
     "attributes": {
+      "email_address": "Ohn Scoggins",
       "email_address": "namenamename@example.com",
       "api_key": "jgn983hy48thw9begh98h4539h4"
     }
