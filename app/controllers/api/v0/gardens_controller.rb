@@ -12,8 +12,8 @@ class Api::V0::GardensController < Api::V0::BaseController
   end
 
   def show
-    if @garden.blank?
-      render json: { errors: "Cannot find garden with ID #{params[:id]}" }, status: :not_found
+    if @garden.nil? || @garden.user_id != @current_user.id
+      render_not_found("Cannot find garden with ID #{params[:id]}")
     else
       render json: GardenSerializer.new(@garden)
     end
@@ -35,6 +35,6 @@ class Api::V0::GardensController < Api::V0::BaseController
   end
 
   def set_garden
-    @garden = Garden.find(params[:id])
+    @garden = Garden.find(params[:id]) rescue nil
   end
 end
