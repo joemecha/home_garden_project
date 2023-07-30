@@ -5,7 +5,8 @@ RSpec.describe 'Garden Show Endpoint', type: :request do
   let(:user) { create(:user) }
   let(:api_key) { user.api_key }
   let(:garden) { create(:garden, user:) }
-  let(:garden_2) { build(:garden, user:) }
+  let(:user_2) { build(:user) }
+  let(:garden_2) { create(:garden, user: user_2) }
 
   describe 'Happy Path' do
 
@@ -39,13 +40,13 @@ RSpec.describe 'Garden Show Endpoint', type: :request do
 
     it 'Returns an error message if requesting a garden that does not belong to the current user' do
       get "/api/v0/gardens/#{garden_2.id}?api_key=#{api_key}"
-      garden_list = JSON.parse(response.body, symbolize_names: true)
+      garden_details = JSON.parse(response.body, symbolize_names: true)
 
       expect(response).to_not be_successful
-      expect(response.status).to eq(401)
+      expect(response.status).to eq(404)
 
-      expect(garden_list[:message]).to be_a(String)
-      expect(garden_list[:message]).to eq('Invalid or missing API key')
+      expect(garden_details[:error]).to be_a(String)
+      expect(garden_details[:error]).to eq("Cannot find garden with ID #{garden_2.id}")
     end
   end
 end
