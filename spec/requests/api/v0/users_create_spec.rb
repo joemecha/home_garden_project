@@ -1,19 +1,20 @@
 require 'rails_helper'
 
 describe 'user create request' do
+  headers = {'Content-Type': 'application/json'}
+  user_create_path = '/api/v0/users'
+  
   describe 'happy path' do
     it 'Creates a user in the database, encrypts password, and responds with API key' do
       User.destroy_all
-
-      headers = {"Content-Type": "application/json"}
-
       body = {
-        "email_address": "someone@example.com",
-        "password": "somepassword23",
-        "password_confirmation": "somepassword23"
+        'name': "#{ Faker::Name.name }",
+        'email_address': "#{ Faker::Internet.email }",
+        'password': 'somepassword23',
+        'password_confirmation': 'somepassword23'
       }
 
-      post '/api/v0/users', headers: headers, params: body.to_json
+      post user_create_path, headers: headers, params: body.to_json
       
       new_user = JSON.parse(response.body, symbolize_names: true)
 
@@ -28,15 +29,14 @@ describe 'user create request' do
 
     describe 'sad path' do
       it 'Does not create a new user if email blank' do
-        headers = {"Content-Type": "application/json"}
-
         body = {
-          "email_address": "",
-          "password": "somepassword23",
-          "password_confirmation": "somepassword23"
+          'name': "#{ Faker::Name.name }",
+          'email_address': '',
+          'password': 'somepassword23',
+          'password_confirmation': 'somepassword23'
         }
 
-        post '/api/v0/users', headers: headers, params: body.to_json
+        post user_create_path, headers: headers, params: body.to_json
         
         new_user = JSON.parse(response.body, symbolize_names: true)
 
@@ -44,19 +44,18 @@ describe 'user create request' do
         expect(response.status).to eq(400)
 
         expect(new_user).to be_a(Hash)
-        expect(new_user[:errors]).to eq("Email address cannot be blank")
+        expect(new_user[:errors]).to eq('Email address cannot be blank')
       end
     
       it 'Does not create a new user if passwords do not match' do
-        headers = {"Content-Type": "application/json"}
-
         body = {
-          "email_address": "someone@example.com",
-          "password": "somepassword23",
-          "password_confirmation": "somepassword"
+          'name': "#{ Faker::Name.name }",
+          'email_address': "#{ Faker::Internet.email }",
+          'password': 'somepassword23',
+          'password_confirmation': 'otherpassword23'
         }
 
-        post '/api/v0/users', headers: headers, params: body.to_json
+        post user_create_path, headers: headers, params: body.to_json
         
         new_user = JSON.parse(response.body, symbolize_names: true)
 
@@ -64,7 +63,7 @@ describe 'user create request' do
         expect(response.status).to eq(400)
 
         expect(new_user).to be_a(Hash)
-        expect(new_user[:errors]).to eq("Passwords do not match")
+        expect(new_user[:errors]).to eq('Passwords do not match')
       end
     end
   end
