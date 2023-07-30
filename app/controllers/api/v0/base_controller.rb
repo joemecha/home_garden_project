@@ -8,14 +8,14 @@ class Api::V0::BaseController < ApplicationController
   attr_reader :current_user
 
   def authenticate
-    authenticate_user || handle_bad_authentication
-  end
-
-  def authenticate_user
     @current_user ||= User.find_by(api_key: params[:api_key])
+
+    # If the user is not authorized, return 401 Unauthorized
+    render json: { message: 'Invalid or missing API key' }, status: :unauthorized unless @current_user
   end
 
-  def handle_bad_authentication
-    render json: { message: 'Invalid or missing API key' }, status: :unauthorized
+  # Method to handle the 404 Not Found response
+  def render_not_found(message = 'Not Found')
+    render json: { error: message }, status: :not_found
   end
 end
