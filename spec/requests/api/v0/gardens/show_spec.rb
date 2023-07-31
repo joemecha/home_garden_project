@@ -22,7 +22,7 @@ RSpec.describe 'Garden Show Endpoint', type: :request do
       expect(garden_details[:data][:attributes]).to have_key(:name)
       expect(garden_details[:data][:attributes]).to have_key(:size)
       expect(garden_details[:data][:attributes][:name]).to_not eq(garden_2.name)
-      expect(garden_details[:data][:attributes][:owner]).to_not eq(garden_2.size)
+      expect(garden_details[:data][:attributes][:size]).to_not eq(garden_2.size)
     end
   end
 

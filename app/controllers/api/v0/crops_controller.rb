@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
 class Api::V0::CropsController < Api::V0::BaseController
-  before_action :set_crop, only: %i[show]
-  before_action :set_location, only: %i[index show create]
+  before_action :set_location
+  before_action :set_crop, only: %i[show] # TODO: add update destroy
+  before_action :authorize_user_for_crop, only: %i[show] # TODO: add update destroy
 
   def index
     if @location.crops.blank?
@@ -13,16 +14,12 @@ class Api::V0::CropsController < Api::V0::BaseController
   end
 
   def show
-    if @crop.blank?
-      render_not_found("Cannot find crop with ID #{params[:id]}")
-    else
-      render json: CropSerializer.new(@crop)
-    end
+    render json: CropSerializer.new(@crop)
   end
 
   def create
     if missing_params?
-      render json: { errors: 'Name, days to maturity, and date planted cannot be blank' }, status: :bad_request
+      render json: { error: 'Name, days to maturity, and date planted cannot be blank' }, status: :bad_request
     else
       crop = Crop.create(crop_params)
       render json: CropSerializer.new(crop), status: :created
@@ -36,7 +33,8 @@ class Api::V0::CropsController < Api::V0::BaseController
   end
 
   def set_crop
-    @crop = Crop.find(params[:id])
+    @crop = Crop.find_by(id: params[:id])
+    render_not_found("Cannot find crop with ID #{params[:id]}") unless @crop
   end
 
   def set_location
@@ -48,5 +46,15 @@ class Api::V0::CropsController < Api::V0::BaseController
     return true unless params[:name] &&
                        params[:days_to_maturity] &&
                        params[:date_planted]
+  end
+
+  def authorize_user_for_crop
+    unless current_user_can_access_crop?
+      render_not_authorized('You are not authorized to perform this action.')
+    end
+  end
+
+  def current_user_can_access_crop?
+    @crop.location.garden.user == current_user
   end
 end

@@ -12,7 +12,7 @@ RSpec.describe 'Location Show Endpoint', type: :request do
 
   describe 'Happy Path' do
 
-    it 'Returns a specific garden in the database' do  
+    it 'Returns a specific location in the database' do  
       get locations_show_path
       location_details = JSON.parse(response.body, symbolize_names: true)
 
@@ -24,7 +24,7 @@ RSpec.describe 'Location Show Endpoint', type: :request do
       expect(location_details[:data][:attributes]).to have_key(:name)
       expect(location_details[:data][:attributes]).to have_key(:size)
       expect(location_details[:data][:attributes][:name]).to_not eq(location_2.name)
-      expect(location_details[:data][:attributes][:owner]).to_not eq(location_2.size)
+      expect(location_details[:data][:attributes][:size]).to_not eq(location_2.size)
     end
   end
 

@@ -14,6 +14,11 @@ class Api::V0::BaseController < ApplicationController
     render json: { message: 'Invalid or missing API key' }, status: :unauthorized unless @current_user
   end
 
+  # Method to handle the 401 Not Authorized response
+  def render_not_authorized(message = 'Unauthorized')
+    render json: { error: message }, status: :unauthorized
+  end
+
   # Method to handle the 404 Not Found response
   def render_not_found(message = 'Not Found')
     render json: { error: message }, status: :not_found
