@@ -4,7 +4,7 @@ FactoryBot.define do
 
     name { "#{Faker::Lorem.words(number: 2)} Location" }
     size { Faker::Number.decimal(l_digits: 2) }
-    irrigated { %w[true false].random }
+    irrigated { %w[true false].sample }
 
     factory :location_with_crops do
       transient do
