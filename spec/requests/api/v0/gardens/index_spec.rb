@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'Garden Index Endpoint', type: :request do
+RSpec.describe 'Gardens Index Endpoint', type: :request do
   describe 'Happy Path' do
     let(:gardens_index_path) { "/api/v0/gardens?api_key=#{user.api_key}" }
     let(:user) { create(:user) }

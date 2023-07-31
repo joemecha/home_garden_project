@@ -20,18 +20,19 @@ class Api::V0::GardensController < Api::V0::BaseController
   end
 
   def create
-    if params[:name].blank?
-      render json: { errors: 'Name cannot be blank' }, status: :bad_request
-    else
-      garden = Garden.create(garden_params)
+    garden = Garden.new(garden_params)
+
+    if garden.save
       render json: GardenSerializer.new(garden), status: :created
+    else
+      render json: { errors: garden.errors.full_messages }, status: :bad_request
     end
   end
 
   private
 
   def garden_params
-    params.require(:garden).permit(:name, :size)
+    params.require(:garden).permit(:name, :size, :user_id)
   end
 
   def set_garden
