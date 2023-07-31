@@ -35,6 +35,6 @@ class Api::V0::GardensController < Api::V0::BaseController
   end
 
   def set_garden
-    @garden = Garden.find(params[:id]) rescue nil
+    @garden = Garden.find_by(id: params[:id])
   end
 end

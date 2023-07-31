@@ -13,7 +13,7 @@ class Api::V0::LocationsController < Api::V0::BaseController
   end
 
   def show
-    if @location.blank?
+    if @location.nil?
       render json: { errors: "Cannot find location with ID #{params[:id]}" }, status: :not_found
     else
       render json: LocationSerializer.new(@location)
@@ -37,10 +37,10 @@ class Api::V0::LocationsController < Api::V0::BaseController
 
   def set_garden
     @garden = Garden.find_by(id: params[:garden_id])
-    render json: { errors: "Cannot find garden with ID #{params[:garden_id]}" }, status: :not_found if @garden.nil?
+    render json: { errors: "Cannot find garden with ID #{params[:garden_id]}" }, status: :not_found if @garden.nil? || @garden.user_id != @current_user.id
   end
 
   def set_location
-    @location = Location.find(params[:id])
+    @location = Location.find_by(id: params[:id])
   end
 end
