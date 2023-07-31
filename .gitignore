@@ -31,3 +31,5 @@
 /config/master.key
 
 /coverage/*
+
+lib/.DS_Store
