@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_07_31_200103) do
+ActiveRecord::Schema[7.0].define(version: 2023_08_01_201340) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -24,6 +24,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_31_200103) do
     t.datetime "updated_at", null: false
     t.bigint "location_id"
     t.index ["location_id"], name: "index_crops_on_location_id"
+    t.check_constraint "date_planted::text ~ '^\\d{4}-\\d{2}-\\d{2}$'::text", name: "enforce_date_planted_format"
   end
 
   create_table "gardens", force: :cascade do |t|
