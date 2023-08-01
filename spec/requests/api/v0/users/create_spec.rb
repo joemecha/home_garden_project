@@ -19,7 +19,7 @@ describe 'user create request' do
       post user_create_path, headers: headers, params: request_body
       
       new_user = JSON.parse(response.body, symbolize_names: true)
-      require 'pry'; binding.pry
+
       expect(response).to be_successful
       expect(response.status).to eq(201)
 
@@ -32,10 +32,12 @@ describe 'user create request' do
     describe 'sad path' do
       it 'Does not create a new user if email blank' do
         body = {
-          'name': "#{ Faker::Name.name }",
-          'email_address': '',
-          'password': 'somepassword23',
-          'password_confirmation': 'somepassword23'
+          'user': {
+            'name': "#{ Faker::Name.name }",
+            'email_address': '',
+            'password': 'somepassword23',
+            'password_confirmation': 'somepassword23'
+          }
         }
 
         post user_create_path, headers: headers, params: body.to_json
@@ -51,10 +53,12 @@ describe 'user create request' do
     
       it 'Does not create a new user if passwords do not match' do
         body = {
-          'name': "#{ Faker::Name.name }",
-          'email_address': "#{ Faker::Internet.email }",
-          'password': 'somepassword23',
-          'password_confirmation': 'otherpassword23'
+          'user': {
+            'name': "#{ Faker::Name.name }",
+            'email_address': "#{ Faker::Internet.email }",
+            'password': 'somepassword23',
+            'password_confirmation': 'otherpassword23'
+          }
         }
 
         post user_create_path, headers: headers, params: body.to_json
