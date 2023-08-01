@@ -6,7 +6,6 @@ class Api::V0::UsersController < ApplicationController
   skip_before_action :verify_authenticity_token, only: %i[create]
 
   def create
-    require 'pry'; binding.pry
     if params[:user][:email_address].blank?
       render json: { errors: 'Email address cannot be blank' }, status: :bad_request
     elsif params[:user][:password] != params[:user][:password_confirmation]
