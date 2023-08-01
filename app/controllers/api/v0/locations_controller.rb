@@ -21,18 +21,19 @@ class Api::V0::LocationsController < Api::V0::BaseController
   end
 
   def create
-    if params[:name].blank?
-      render json: { errors: 'Name cannot be blank' }, status: :bad_request
-    else
-      location = Location.create(location_params)
+    location = Location.new(location_params)
+
+    if location.save
       render json: LocationSerializer.new(location), status: :created
+    else
+      render json: { errors: location.errors.full_messages }, status: :bad_request
     end
   end
 
   private
 
   def location_params
-    params.require(:location).permit(:name, :size, :irrigated)
+    params.require(:location).permit(:name, :size, :irrigated, :garden_id)
   end
 
   def set_garden
