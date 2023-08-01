@@ -15,7 +15,7 @@ RSpec.describe 'Crops Create Endpoint', type: :request do
             name: 'Radish',
             variety: 'Japanese Kabu',
             days_to_maturity: 40,
-            date_planted: '2023-05-25',
+            date_planted: 20.days.ago,
             active: true,
             location_id: location.id
           } 
@@ -33,8 +33,9 @@ RSpec.describe 'Crops Create Endpoint', type: :request do
             attributes: { 
               name: 'Radish',
               variety: 'Japanese Kabu',
+              date_planted: 20.days.ago.strftime('%Y-%m-%d'),
               days_to_maturity: 40,
-              date_planted: '2023-05-25',
+              days_remaining_until_harvest: 20,
               active: true,
             },
             id: Crop.last.id.to_s,

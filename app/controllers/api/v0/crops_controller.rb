@@ -18,7 +18,6 @@ class Api::V0::CropsController < Api::V0::BaseController
   end
 
   def create
-    require 'pry'; binding.pry
     crop = Crop.new(crop_params)
 
     if crop.save
