@@ -32,7 +32,24 @@ Home Garden Project is a RESTful back-end API which exposes data on Gardens, Loc
 
 ## Stretch Goals:
 
-TBD
+2023-08-01:
+Completed code to calculate and serialize "days remaining until harvest"
+
+Index, Show, Create are complete for Garden, Location, and Crop
+
+Test coverage is 100%
+
+Next steps:
+0. Create a seed file to generate sample data
+1. Implement devise gem for authentication
+2. Create API documentation through a Postman collection and/or Swagger
+    2b. Consider serializing related models (e.g. a crop's location)
+3. Consume a relevant 3rd party API
+4. Add one or more queries for Garden-level data
+5. Add update and destroy actions where needed
+6. Implement caching where possible
+7. Build out notes CRUD functionality
+8. Diagram the app
 
 
 ## Versions
