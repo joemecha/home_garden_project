@@ -8,10 +8,11 @@ class Crop < ApplicationRecord
   validates :date_planted, presence: true
   validates :days_to_maturity, presence: true
 
+  attr_accessor :days_remaining_until_harvest
+
   # Calculate days remaining until harvest
   def days_remaining_until_harvest
-    # WIP
-    # maturity_date = created_at + days_to_maturity
+    maturity_date = date_planted + days_to_maturity
     remaining_days = (maturity_date - Date.current).to_i
 
     # If the crop has already matured or maturity date is in the past, return 0
