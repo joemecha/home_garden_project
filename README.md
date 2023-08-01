@@ -3,7 +3,7 @@
 <!-- ![logo](lib/images/garden_logo.png "Home Garden logo") -->
 
 ## About
-Home Garden Project is a RESTful back-end API which exposes data on Locations, Crops, and Days-to-Maturity. 
+Home Garden Project is a RESTful back-end API which exposes data on Gardens, Locations within gardens (e.g. separate raised beds), Crops, and Days-to-Maturity. 
 
 
 ## Table of contents
@@ -107,12 +107,12 @@ __For endpoints other than create new user, send the api_key in the request body
 ### 5 Retrieve all crops for a location
 | Method   | URI                                      | Description                              |
 | -------- | ---------------------------------------- | ---------------------------------------- |
-| `GET`    | `/api/v0/gardens/:garden_id/locations/:location_id/crops`     | Retrieve all crops for one location  |
+| `GET`    | `/api/v0/locations/:location_id/crops`     | Retrieve all crops for one location  |
 
 ### 6 Retrieve data for one crop for a location
 | Method   | URI                                      | Description                              |
 | -------- | ---------------------------------------- | ---------------------------------------- |
-| `GET`    | `/api/v0/gardens/:garden_id/locations/:location_id/crops/:id`     | Retrieve one crop for a single location  |
+| `GET`    | `/api/locations/:location_id/crops/:id`     | Retrieve one crop for a single location  |
 
 
 ## Examples
@@ -274,7 +274,7 @@ status: 404
 body:
 
 {
-    "errors": "Cannot find location with ID 55"
+    "errors": "Can't find location with ID 55"
 }
 ```
 
