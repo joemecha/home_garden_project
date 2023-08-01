@@ -69,6 +69,7 @@ end
 
 group :test do
   gem 'capybara'
+  gem 'jsonapi-rspec'
   gem 'shoulda-matchers', '~> 5.0'
   gem 'simplecov', require: false
   gem 'webmock', require: false
