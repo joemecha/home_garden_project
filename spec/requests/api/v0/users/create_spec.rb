@@ -7,24 +7,26 @@ describe 'user create request' do
   describe 'happy path' do
     it 'Creates a user in the database, encrypts password, and responds with API key' do
       User.destroy_all
-      body = {
-        'name': "#{ Faker::Name.name }",
-        'email_address': "#{ Faker::Internet.email }",
-        'password': 'somepassword23',
-        'password_confirmation': 'somepassword23'
-      }
+      request_body = {
+        'user': {
+          'name': "#{ Faker::Name.name }",
+          'email_address': "#{ Faker::Internet.email }",
+          'password': 'somepassword23',
+          'password_confirmation': 'somepassword23'
+        }
+      }.to_json
 
-      post user_create_path, headers: headers, params: body.to_json
+      post user_create_path, headers: headers, params: request_body
       
       new_user = JSON.parse(response.body, symbolize_names: true)
-
+      require 'pry'; binding.pry
       expect(response).to be_successful
       expect(response.status).to eq(201)
 
       expect(new_user[:data].class).to eq(Hash)
       expect(new_user[:data].keys).to eq( %i[id type attributes])
       expect(new_user[:data].keys.size).to eq(3)
-      expect(new_user[:data][:attributes].keys).to eq( %i[email_address api_key])
+      expect(new_user[:data][:attributes].keys).to eq( %i[name email_address api_key])
     end
 
     describe 'sad path' do
