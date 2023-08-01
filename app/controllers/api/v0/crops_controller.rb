@@ -18,18 +18,20 @@ class Api::V0::CropsController < Api::V0::BaseController
   end
 
   def create
-    if missing_params?
-      render json: { error: 'Name, days to maturity, and date planted cannot be blank' }, status: :bad_request
-    else
-      crop = Crop.create(crop_params)
+    require 'pry'; binding.pry
+    crop = Crop.new(crop_params)
+
+    if crop.save
       render json: CropSerializer.new(crop), status: :created
+    else
+      render json: { errors: crop.errors.full_messages }, status: :bad_request
     end
   end
 
   private
 
   def crop_params
-    params.require(:crop).permit(:name, :variety, :days_to_maturity, :date_planted, :active)
+    params.require(:crop).permit(:name, :variety, :days_to_maturity, :date_planted, :active, :location_id)
   end
 
   def set_crop
@@ -40,12 +42,6 @@ class Api::V0::CropsController < Api::V0::BaseController
   def set_location
     @location = Location.find_by(id: params[:location_id])
     render_not_found("Cannot find location with ID #{params[:location_id]}") unless @location
-  end
-
-  def missing_params?
-    return true unless params[:name] &&
-                       params[:days_to_maturity] &&
-                       params[:date_planted]
   end
 
   def authorize_user_for_crop
