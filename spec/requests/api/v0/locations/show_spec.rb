@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe 'Location Show Endpoint', type: :request do
-  let(:locations_show_path) { "/api/v0/gardens/#{garden.id}/locations/#{location.id}?api_key=#{api_key}" }
+  let(:locations_show_path) { "/api/v0/gardens/#{garden.id}/locations/#{location.id}" }
   let(:user) { create(:user) }
   let(:api_key) { user.api_key }
   let(:garden) { create(:garden, user:) }
@@ -30,7 +30,7 @@ RSpec.describe 'Location Show Endpoint', type: :request do
 
   describe 'Sad Path' do
     it 'Returns an error if location not found' do
-      get "/api/v0/gardens/#{garden.id}/locations/1000?api_key=#{api_key}"
+      get "/api/v0/gardens/#{garden.id}/locations/1000"
 
       location_details = JSON.parse(response.body, symbolize_names: true)
 
@@ -41,7 +41,7 @@ RSpec.describe 'Location Show Endpoint', type: :request do
     end
 
     it 'Returns an error message if requesting a location that does not belong to the current user' do
-      get "/api/v0/gardens/#{garden.id}/locations/#{location_2.id}?api_key=#{api_key}"
+      get "/api/v0/gardens/#{garden.id}/locations/#{location_2.id}"
       location_details = JSON.parse(response.body, symbolize_names: true)
 
       expect(response).to_not be_successful

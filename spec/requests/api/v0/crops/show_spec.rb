@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe 'Crop Show Endpoint', type: :request do
-  let(:crops_show_path) { "/api/v0/locations/#{location.id}/crops/#{crop.id}?api_key=#{api_key}" }
+  let(:crops_show_path) { "/api/v0/locations/#{location.id}/crops/#{crop.id}" }
   let(:user) { create(:user) }
   let(:api_key) { user.api_key }
   let(:garden) { build(:garden, user:) }
@@ -32,7 +32,7 @@ RSpec.describe 'Crop Show Endpoint', type: :request do
 
   describe 'Sad Path' do
     it 'Returns an error if crop not found' do
-      get "/api/v0/locations/#{location.id}/crops/10000?api_key=#{api_key}"
+      get "/api/v0/locations/#{location.id}/crops/10000"
 
       crop_details = JSON.parse(response.body, symbolize_names: true)
 
@@ -43,7 +43,7 @@ RSpec.describe 'Crop Show Endpoint', type: :request do
     end
 
     it 'Returns an error message if requesting a crop that does not belong to the current user' do
-      get "/api/v0/locations/#{location_2.id}/crops/#{crop_2.id}?api_key=#{api_key}"
+      get "/api/v0/locations/#{location_2.id}/crops/#{crop_2.id}"
       crop_details = JSON.parse(response.body, symbolize_names: true)
 
       expect(response).to_not be_successful

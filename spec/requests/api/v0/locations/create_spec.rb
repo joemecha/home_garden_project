@@ -18,7 +18,7 @@ RSpec.describe 'Locations Create Endpoint', type: :request do
           } 
         }.to_json
 
-        post "/api/v0/gardens/#{garden.id}/locations?api_key=#{api_key}", headers:, params: request_body
+        post "/api/v0/gardens/#{garden.id}/locations", headers:, params: request_body
 
         new_location = JSON.parse(response.body, symbolize_names: true)
 
