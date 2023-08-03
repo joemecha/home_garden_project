@@ -20,14 +20,15 @@ Home Garden Project is a RESTful back-end API which exposes data on Gardens, Loc
 
 ## Developer Notes
 
-  - `The database design` is a __one-to-many__ relationship between Garden & Locations, and a __many-to-many__ between Locations and Crops.
+  - `The database design` is a __one-to-many__ relationship between Garden & Locations, and for Locations & Crops.
 
   
-  - `Testing` request (integration) tests WILL include happy and sad paths, and WILL be included in a __postman collection__
+  - `Testing` request tests include happy and sad paths, and are be included in a __postman collection__ (Note: to be added)
 
-  - `Authentication` is achieved through registering a new user, generating a random key, and by having the controllers inherit authenticate methods which are called with a 'before_action' filter. The response returns an `API KEY` __please see SET UP for instructions to generate a key__ 
-    - _API KEY IS REQUIRED TO HIT ENDPOINTS_
-    - With _has secure password_ in the User model, an authenticate method is available for checking credentials in a _log in_ action. However, there is currently no login/session; an authenticate method is defined in the _base controller_ to check the user/api_key.
+  - `Authentication` is achieved using Devise and JWT (JSON Web Token). It requires the following steps:
+    1. Create (signup) a user
+    2. Sign in to authenticate and generate a token
+    3. Sign out causes the token to be revoked
 
 
 ## Stretch Goals:
@@ -41,7 +42,7 @@ Test coverage is 100%
 
 Next steps:
 0. Create a seed file to generate sample data
-1. Implement devise gem for authentication
+1. ~~Implement devise gem for authentication~~
 2. Create API documentation through a Postman collection and/or Swagger
     2b. Consider serializing related models (e.g. a crop's location)
 3. Consume a relevant 3rd party API
@@ -134,44 +135,69 @@ __For endpoints other than create new user, send the api_key in the request body
 
 ## Examples
 
-#### 0 - Create new user and receive API KEY
+#### 0 - Create new user
 _Request_
-```
-POST /api/v0/users
+POST /signup
 Content-Type: application/json
 Accept: application/json
 
+```json
 {
-  "name": "Ohn Scoggins",
-  "email_address": "namenamename@example.com",
+  "name": "Josh",
+  "email": "testtesttest@test.com",
   "password": "mypassword",
-  "password_confirmation": "mypassword"
 }
 ```
 _Response_
 ```
-status: 201
-body:
-
 {
-  "data": {
-    "type": "users",
-    "id": "1",
-    "attributes": {
-      "email_address": "Ohn Scoggins",
-      "email_address": "namenamename@example.com",
-      "api_key": "jgn983hy48thw9begh98h4539h4"
+    "status": {
+        "code": 200,
+        "message": "Signed up successfully."
+    },
+    "data": {
+        "id": 1,
+        "name": "Josh",
+        "email": "testtesttest@test.com"
     }
-  }
+}
+```
+
+
+#### 0 - Login
+_Request_
+POST /login
+Content-Type: application/json
+Accept: application/json
+
+```json
+{
+  "email": "testtesttest@test.com",
+  "password": "mypassword"
+}
+```
+_Response_
+```json
+{
+    "status": {
+        "code": 200,
+        "message": "Logged in successfully.",
+        "data": {
+            "user": {
+                "id": 1,
+                "name": "Josh",
+                "email": "testtesttest@test.com"
+            }
+        }
+    }
 }
 ```
 
 #### 1 - View all gardens:
 
-```
 status: 200
 body:
-
+```json
 {
     "data": [
         {
@@ -197,9 +223,9 @@ body:
 
 #### 2 - Retrieve Garded with ID 2:
 
-```
 status: 200
 body:
+```json
 
 {
     "data": {
@@ -214,22 +240,22 @@ body:
 ```
 
 #### 2b - No garden for given ID (555):
-```
+
 status: 404
 body:
+```json
 
 {
-    "errors": "Cannot find garden with ID 555"
+    "errors": "Can't find garden with ID 555"
 }
 ```
 
 
 #### 3 - Retrieve all locations for garden 1:
 
-```
 status: 200
 body:
-
+```json
 {
     "data": [
         {
@@ -256,10 +282,10 @@ body:
 
 
 #### 3b - No locations for garden:
-```
+
 status: 200
 body:
-
+```json
 {
     "message": "There are no locations associated with this garden"
 }
@@ -268,10 +294,9 @@ body:
 
 #### 4 - Retrieve location 2 for garden 1:
 
-```
 status: 200
 body:
-
+```json
 {
     "data": {
         "id": "2",
@@ -286,9 +311,10 @@ body:
 ```
 
 #### 4b - No location with ID 55 for garden 1:
-```
+
 status: 404
 body:
+```json
 
 {
     "errors": "Can't find location with ID 55"
