@@ -3,18 +3,9 @@
 require 'securerandom'
 
 class Api::V0::UsersController < ApplicationController
-  # def create
-  #   if params[:user][:email_address].blank?
-  #     render json: { errors: 'Email address cannot be blank' }, status: :bad_request
-  #   elsif params[:user][:password] != params[:user][:password_confirmation]
-  #     render json: { errors: 'Passwords do not match' }, status: :bad_request
-  #   else
-  #     user = User.create(user_params)
-  #     user.update(api_key: SecureRandom.hex)
+  before_action :authenticate_user!
 
-  #     render json: UserSerializer.new(user), status: :created
-  #   end
-  # end
+  # TODO: add show, update, destroy and related tests
 
   private
 

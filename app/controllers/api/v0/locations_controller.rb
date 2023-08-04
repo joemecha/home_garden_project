@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class Api::V0::LocationsController < Api::V0::BaseController
+  before_action :authenticate_user!
   before_action :set_garden
   before_action :set_location, only: %i[show]
 
@@ -38,7 +39,7 @@ class Api::V0::LocationsController < Api::V0::BaseController
 
   def set_garden
     @garden = Garden.find_by(id: params[:garden_id])
-    render_not_found("Cannot find garden with ID #{params[:garden_id]}") if @garden.nil? || @garden.user_id != @current_user.id
+    render_not_found("Cannot find garden with ID #{params[:garden_id]}") if @garden.nil? || @garden.user_id != current_user.id
   end
 
   def set_location

@@ -1,10 +1,11 @@
 # frozen_string_literal: true
 
 class Api::V0::GardensController < Api::V0::BaseController
+  before_action :authenticate_user!
   before_action :set_garden, only: %i[show]
 
   def index
-    if @current_user.gardens.none?
+    if current_user.gardens.none?
       render json: { message: 'You currently have no gardens.'}
     else
       render json: GardenSerializer.new(Garden.all)
@@ -12,7 +13,7 @@ class Api::V0::GardensController < Api::V0::BaseController
   end
 
   def show
-    if @garden.nil? || @garden.user_id != @current_user.id
+    if @garden.nil? || @garden.user_id != current_user.id
       render_not_found("Cannot find garden with ID #{params[:id]}")
     else
       render json: GardenSerializer.new(@garden)

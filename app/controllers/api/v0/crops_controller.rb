@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class Api::V0::CropsController < Api::V0::BaseController
+  before_action :authenticate_user!
   before_action :set_location
   before_action :set_crop, only: %i[show] # TODO: add update destroy
   before_action :authorize_user_for_crop, only: %i[show] # TODO: add update destroy
