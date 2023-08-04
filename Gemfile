@@ -6,6 +6,8 @@ ruby '3.2.2'
 gem 'bcrypt'
 gem 'bootsnap', require: false
 gem 'bundler'
+gem 'devise'
+gem 'devise-jwt'
 gem 'faraday'
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem 'jbuilder'
@@ -16,8 +18,11 @@ gem 'importmap-rails'
 # gem 'paper_trail'
 gem 'pg', '~> 1.1'
 gem 'puma', '~> 5.0'
+gem 'rack-cors'
 gem 'rails', '~> 7.0.5', '>= 7.0.5.1'
 gem 'rake'
+gem 'rswag-api'
+gem 'rswag-ui'
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem 'sprockets-rails'
 # Hotwire's modest JavaScript framework [https://stimulus.hotwired.dev]
@@ -50,6 +55,7 @@ group :development, :test do
   gem 'ruby-graphviz'
   gem 'pry'
   gem 'rspec-rails', '~> 6.0'
+  gem 'rswag-specs'
 end
 
 group :development do

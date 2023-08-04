@@ -2,16 +2,25 @@ require 'rails_helper'
 
 RSpec.describe 'Gardens Index Endpoint', type: :request do
   describe 'Happy Path' do
-    let(:gardens_index_path) { "/api/v0/gardens?api_key=#{user.api_key}" }
+    let(:gardens_index_path) { '/api/v0/gardens' }
     let(:user) { create(:user) }
-    let(:api_key) { user.api_key }
+    let(:token) do
+      post '/login', params: { user: { email: user.email, password: user.password } }
+      JSON.parse(response.body)['token']
+    end
+
+    before do
+      # Include the JWT token in the request headers for all examples
+      headers = { 'Authorization' => "Bearer #{token}" }
+      @headers_with_token = headers
+    end
 
     it 'Returns a list of gardens in the database' do
       2.times do
-        create(:garden, user:)
+        create(:garden, user: user)
       end
-      
-      get gardens_index_path
+
+      get gardens_index_path, headers: @headers_with_token
       garden_list = JSON.parse(response.body, symbolize_names: true)
 
       expect(response).to be_successful
@@ -24,7 +33,7 @@ RSpec.describe 'Gardens Index Endpoint', type: :request do
     end
 
     it 'Returns a message if no gardens in the database' do
-      get gardens_index_path
+      get gardens_index_path, headers: @headers_with_token
       garden_list = JSON.parse(response.body, symbolize_names: true)
 
       expect(response).to be_successful
@@ -36,26 +45,22 @@ RSpec.describe 'Gardens Index Endpoint', type: :request do
   end
 
   describe 'Sad Path' do
-    it 'Returns an error message if no api key' do
-      get '/api/v0/gardens'
-      garden_list = JSON.parse(response.body, symbolize_names: true)
+    it 'Returns an error if the JWT token is invalid' do
+      invalid_token = 'invalid_token_here'
 
-      expect(response).to_not be_successful
+      headers = { 'Authorization' => "Bearer #{invalid_token}" }
+      get '/api/v0/gardens', headers: headers
+
+      expect(response).not_to be_successful
       expect(response.status).to eq(401)
-
-      expect(garden_list[:message]).to be_a(String)
-      expect(garden_list[:message]).to eq('Invalid or missing API key')
     end
 
-    it 'Returns an error message if incorrect api key' do
-      get '/api/v0/gardens?api_key=111'
-      garden_list = JSON.parse(response.body, symbolize_names: true)
+    it 'Returns an error if the JWT token is missing' do
+      # Omitting the 'Authorization' header
+      get '/api/v0/gardens'
 
-      expect(response).to_not be_successful
+      expect(response).not_to be_successful
       expect(response.status).to eq(401)
-
-      expect(garden_list[:message]).to be_a(String)
-      expect(garden_list[:message]).to eq('Invalid or missing API key')
     end
   end
 end

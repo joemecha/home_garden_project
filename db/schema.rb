@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_08_01_201340) do
+ActiveRecord::Schema[7.0].define(version: 2023_08_03_221002) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -20,9 +20,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_01_201340) do
     t.integer "days_to_maturity", null: false
     t.date "date_planted", null: false
     t.boolean "active"
+    t.bigint "location_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "location_id"
     t.index ["location_id"], name: "index_crops_on_location_id"
     t.check_constraint "date_planted::text ~ '^\\d{4}-\\d{2}-\\d{2}$'::text", name: "enforce_date_planted_format"
   end
@@ -55,14 +55,21 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_01_201340) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.string "email_address"
-    t.string "password_digest"
-    t.string "api_key"
+    t.string "email", default: "", null: false
+    t.string "encrypted_password", default: "", null: false
+    t.string "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "name"
+    t.string "jti", null: false
+    t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["jti"], name: "index_users_on_jti", unique: true
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "crops", "locations"
   add_foreign_key "gardens", "users"
   add_foreign_key "locations", "gardens"
   add_foreign_key "notes", "crops"

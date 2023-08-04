@@ -13,6 +13,14 @@ describe Crop, type: :model do
   end
 
   describe "#days_remaining_until_harvest" do
+    before do
+      # Freeze time to a specific date to make the tests timezone-independent
+      travel_to Time.zone.local(2023, 8, 1, 12, 00)
+    end
+
+    after do
+      travel_back
+    end
     context "when there are remaining days until harvest" do
       let(:location) { build(:location) }
       let(:crop) { create(:crop, days_to_maturity: 20, date_planted: Date.today - 10, location:) }
