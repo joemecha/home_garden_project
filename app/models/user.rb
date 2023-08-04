@@ -13,6 +13,21 @@ class User < ApplicationRecord
             uniqueness: { case_sensitive: false },
             length: { minimum: 8 },
             format: { with: URI::MailTo::EMAIL_REGEXP }
+  
+  before_validation :set_time_zone_from_zip_code, on: :create
+  validates :zip_code, presence: true, format: { with: /\A\d{5}\z/, message: "should be a valid US zip code" }
 
-  # before_save { email_address.downcase! } -- this is messing up the validation test in the model spec
+
+  private
+
+  def set_time_zone_from_zip_code
+    return unless zip_code.present?
+    
+    coordinates = Geocoder.coordinates(zip_code)
+    
+    if coordinates.present?
+      time_zone = Timezone.lookup(coordinates[0], coordinates[1])
+      self.time_zone = time_zone.name if time_zone.present?
+    end
+  end
 end
