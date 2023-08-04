@@ -2,14 +2,24 @@ require 'rails_helper'
 
 RSpec.describe 'Crops Create Endpoint', type: :request do
   let(:user) { create(:user) }
-  let(:api_key) { user.api_key }
+  let(:token) do
+    post '/login', params: { user: { email: user.email, password: user.password } }
+    JSON.parse(response.body)['token']
+  end
   let(:garden) { create(:garden, user:) }
   let(:location) { create(:location, garden:) }
+
+  before do
+    # Include the JWT token in the request headers for all examples
+    headers = { 'Authorization' => "Bearer #{token}" }
+    @headers_with_token = headers
+  end
 
   describe 'POST /api/v0/locations/:id/crops' do
     context 'Happy Path' do
       it 'creates a new crop for a location' do
         headers = {"Content-Type": "application/json"}
+
         request_body = { 
           crop: { 
             name: 'Radish',

@@ -3,7 +3,10 @@ require 'rails_helper'
 RSpec.describe 'Crop Show Endpoint', type: :request do
   let(:crops_show_path) { "/api/v0/locations/#{location.id}/crops/#{crop.id}" }
   let(:user) { create(:user) }
-  let(:api_key) { user.api_key }
+  let(:token) do
+    post '/login', params: { user: { email: user.email, password: user.password } }
+    JSON.parse(response.body)['token']
+  end
   let(:garden) { build(:garden, user:) }
   let(:location) { create(:location, garden:) }
   let(:crop) { create(:crop, location:) }
@@ -12,10 +15,16 @@ RSpec.describe 'Crop Show Endpoint', type: :request do
   let(:location_2) { create(:location, garden: garden_2) }
   let(:crop_2) { create(:crop, location: location_2) }
 
-  describe 'Happy Path' do
+  before do
+    # Include the JWT token in the request headers for all examples
+    headers = { 'Authorization' => "Bearer #{token}" }
+    @headers_with_token = headers
+  end
 
+  describe 'Happy Path' do
     it 'Returns a specific crop in the database' do  
       get crops_show_path
+
       crop_details = JSON.parse(response.body, symbolize_names: true)
 
       expect(response).to be_successful

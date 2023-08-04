@@ -3,15 +3,25 @@ require 'rails_helper'
 RSpec.describe 'Gardens Show Endpoint', type: :request do
   let(:gardens_show_path) { "/api/v0/gardens/#{garden.id}" }
   let(:user) { create(:user) }
-  let(:api_key) { user.api_key }
+  let(:token) do
+    post '/login', params: { user: { email: user.email, password: user.password } }
+    JSON.parse(response.body)['token']
+  end
   let(:garden) { create(:garden, user:) }
   let(:user_2) { build(:user) }
   let(:garden_2) { create(:garden, user: user_2) }
 
+  before do
+    # Include the JWT token in the request headers for all examples
+    headers = { 'Authorization' => "Bearer #{token}" }
+    @headers_with_token = headers
+  end
+
   describe 'GET /api/v0/garden/:id' do
     context 'Happy Path' do
-      it 'Returns a specific garden in the database' do  
+      it 'Returns a specific garden in the database' do
         get gardens_show_path
+        
         garden_details = JSON.parse(response.body, symbolize_names: true)
 
         expect(response).to be_successful
@@ -39,7 +49,10 @@ RSpec.describe 'Gardens Show Endpoint', type: :request do
       end
 
       it 'Returns an error message if requesting a garden that does not belong to the current user' do
+        post '/login', params: { user: { email: user.email, password: user.password } }
+
         get "/api/v0/gardens/#{garden_2.id}"
+
         garden_details = JSON.parse(response.body, symbolize_names: true)
 
         expect(response).to_not be_successful

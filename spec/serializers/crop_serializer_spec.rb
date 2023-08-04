@@ -6,6 +6,15 @@ RSpec.describe CropSerializer do
   let(:location) { build(:location) }
   let(:crop) { create(:crop, days_to_maturity: 20, date_planted: Date.today - 10, location:) }
 
+  before do
+    # Freeze time to a specific date to make the tests timezone-independent
+    travel_to Time.zone.local(2023, 8, 1, 12, 00)
+  end
+
+  after do
+    travel_back
+  end
+
   it 'should include the days_remaining_until_harvest attribute' do
     days_remaining = subject.serializable_hash[:data][:attributes][:days_remaining_until_harvest]
     expect(days_remaining).to eq(10)

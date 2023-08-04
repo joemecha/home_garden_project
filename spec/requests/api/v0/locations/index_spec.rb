@@ -1,12 +1,21 @@
 require 'rails_helper'
 
 RSpec.describe 'Location Index Endpoint', type: :request do
-  let(:locations_index_path) { "/api/v0/gardens/#{garden.id}/locations?api_key=#{user.api_key}" }
-  let(:user) { create(:user) }
-  let(:api_key) { user.api_key }
-  let(:garden) { create(:garden, user:) }
-
   describe 'Happy Path' do
+    let(:locations_index_path) { "/api/v0/gardens/#{garden.id}/locations" }
+    let(:user) { create(:user) }
+    let(:token) do
+      post '/login', params: { user: { email: user.email, password: user.password } }
+      JSON.parse(response.body)['token']
+    end
+    let(:garden) { create(:garden, user:) }
+
+    before do
+      # Include the JWT token in the request headers for all examples
+      headers = { 'Authorization' => "Bearer #{token}" }
+      @headers_with_token = headers
+    end
+
     it 'Returns a list of locations in the database' do
       2.times do
         create(:location, garden:)
@@ -32,30 +41,6 @@ RSpec.describe 'Location Index Endpoint', type: :request do
       expect(response.status).to eq(200)
       expect(location_list[:message]).to be_a(String)
       expect(location_list[:message]).to eq('You currently have no locations.')
-    end
-  end
-
-  describe 'Sad Path' do
-    it 'Returns an error message if no api key' do
-      get "/api/v0/gardens/#{garden.id}/locations"
-      location_list = JSON.parse(response.body, symbolize_names: true)
-
-      expect(response).to_not be_successful
-      expect(response.status).to eq(401)
-
-      expect(location_list[:message]).to be_a(String)
-      expect(location_list[:message]).to eq('Invalid or missing API key')
-    end
-
-    it 'Returns an error message if incorrect api key' do
-      get "/api/v0/gardens/#{garden.id}/locations?api_key=0"
-      location_list = JSON.parse(response.body, symbolize_names: true)
-
-      expect(response).to_not be_successful
-      expect(response.status).to eq(401)
-
-      expect(location_list[:message]).to be_a(String)
-      expect(location_list[:message]).to eq('Invalid or missing API key')
     end
   end
 end
