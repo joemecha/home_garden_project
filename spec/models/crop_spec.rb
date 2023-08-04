@@ -13,6 +13,10 @@ describe Crop, type: :model do
   end
 
   describe "#days_remaining_until_harvest" do
+    let(:user) { build(:user) }
+    let(:garden) { build(:garden, user:) }
+    let(:location) { build(:location, garden:) }
+
     before do
       # Freeze time to a specific date to make the tests timezone-independent
       travel_to Time.zone.local(2023, 8, 1, 12, 00)
@@ -21,8 +25,8 @@ describe Crop, type: :model do
     after do
       travel_back
     end
+
     context "when there are remaining days until harvest" do
-      let(:location) { build(:location) }
       let(:crop) { create(:crop, days_to_maturity: 20, date_planted: Date.today - 10, location:) }
       
       it "returns the correct number of days remaining" do  
@@ -31,7 +35,6 @@ describe Crop, type: :model do
     end
     
     context "when the crop has already matured" do
-      let(:location) { build(:location) }
       let(:crop) { create(:crop, days_to_maturity: 20, date_planted: Date.today - 25, location:) }
       
       it "returns 0" do  
@@ -41,7 +44,6 @@ describe Crop, type: :model do
     end
     
     context "when date_planted is in the future" do
-      let(:location) { build(:location) }
       let(:crop) { create(:crop, days_to_maturity: 20, date_planted: Date.today + 5, location:) }
 
       it "returns days_to_maturity" do

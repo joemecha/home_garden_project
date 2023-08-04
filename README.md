@@ -18,20 +18,25 @@ Home Garden Project is a RESTful back-end API which exposes data on Gardens, Loc
 [**About Me**](#about-me) |
 
 
-## Developer Notes
+## Technical Notes
 
-  - `The database design` is a __one-to-many__ relationship between Garden & Locations, and for Locations & Crops.
-
+  - `The database design` is a simple __one-to-many__ relationship between Garden & Locations, and for Locations & Crops.
   
-  - `Testing` request tests include happy and sad paths, and are be included in a __postman collection__ (Note: to be added)
+  <!-- - `Testing` request tests include happy and sad paths, and are be included in a __postman collection__ (Note: to be added) -->
 
-  - `Authentication` is achieved using Devise and JWT (JSON Web Token). It requires the following steps:
+  - `Authentication` is achieved using Devise and JWT (JSON Web Token). The non-RESTful routes for signup, login, logout were added to manage users and their access to the API. It requires the following steps:
     1. Create (signup) a user
-    2. Sign in to authenticate and generate a token
-    3. Sign out causes the token to be revoked
+    2. Login to authenticate and generate a token
+    3. Logout causes the token to be revoked
+
+  - Geocoder and the Timezone gem are leveraged to provide seamless time zone detection for users and ensures precise data about crop harvest timing based on their geographic location. Geocoder simplifies the process by converting user-provided zip codes into latitude and longitude coordinates, while the Timezone gem leverages Geonames to accurately identify time zones based on the obtained coordinates.
 
 
-## Stretch Goals:
+## Development Notes:
+
+2023-08-04:
+2023-08-03:
+Authentication moved to using Devise and JWT, and requirement to include an API key in all requests has been removed; all request tests updated
 
 2023-08-01:
 Completed code to calculate and serialize "days remaining until harvest"
@@ -63,15 +68,20 @@ Next steps:
   1. Get a copy of this repository
   2. Install gem packages by running `bundle`
   3. Setup the database: `rails db:(drop,create,migrate,seed)` or `rails db:setup`
-  4. Run command `rails routes` to view available routes
-  5. Run command `rails s` and navigate to http://localhost:3000 to consume API endpoints below
-  <!-- 6. If using `Postman`, please use the __collection__ included in this respository (home_garden_api.postman.json)
-  7. API KEY - seed data includes a user with the api_key:
-    ```
-    [ADD KEY HERE]
-    ```
-    This key is used in all postman requests -->
+  4. Set up Geocoder with MapQuest
+    A. Sign up for a MapQuest API key:
+    B. Go to the MapQuest Developer Portal (https://developer.mapquest.com/plan_purchase/steps/business_edition/business_edition_free/register)
+    C. Create an account or log in if you already have one.
+    D. Create a new application to obtain an API key.
+    E. Create a new file .env in the main app directory. Add ```MAPQUEST_API_KEY=<your_api_key>``````
+  5. Set up Timezone gem with Geonames
+    A. Sign up for a Geonames username - go to the Geonames website (https://www.geonames.org/login) and sign up for a free account.
+    B. Enable Geonames web services - after logging in, go to https://www.geonames.org/manageaccount and ensure that the "Free Web Services" option is checked.
+    C. Add ```YOUR_GEONAMES_USERNAME=<your_geonames_username>``` to your .env file
 
+  6. Run command `rails routes` to view available routes
+  7. Run command `rails s` and navigate to http://localhost:3000 to consume API endpoints below
+  <!-- 8. If using `Postman`, please use the __collection__ included in this respository (home_garden_api.postman.json)
 
 <!-- ## Project Design
 ![Diagram](lib/images/Home_Garden_API_diagram.jpeg "Project Design") -->
