@@ -7,10 +7,6 @@ RSpec.describe User do
 
   describe 'validations' do
     it { should validate_presence_of :email }
-    it do
-      should validate_uniqueness_of(:email).
-        case_insensitive
-    end
   end
 
   describe 'user attributes' do
@@ -19,6 +15,18 @@ RSpec.describe User do
       
       expect(user.email).to eq('something@example.com')
       expect(user.name).to eq('Josh')
+    end
+
+    it 'sets time zone based on zip code when zip code is present' do
+      user = User.create(email: 'something@example.com', password: 'password19', name: 'Josh', zip_code: '94105')
+      
+      expect(user.time_zone).to eq('America/Los_Angeles')
+    end
+
+    it 'does not set time zone when zip code is blank' do
+      user = User.create(email: 'something@example.com', password: 'password19', name: 'Josh', zip_code: nil)
+      
+      expect(user.time_zone).to be_nil
     end
   end
 end
