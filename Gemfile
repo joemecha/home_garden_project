@@ -8,7 +8,9 @@ gem 'bootsnap', require: false
 gem 'bundler'
 gem 'devise'
 gem 'devise-jwt'
+gem 'dotenv-rails', groups: [:development, :test]
 gem 'faraday'
+gem 'geocoder'
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem 'jbuilder'
 gem 'jsonapi-serializer'
@@ -27,6 +29,7 @@ gem 'rswag-ui'
 gem 'sprockets-rails'
 # Hotwire's modest JavaScript framework [https://stimulus.hotwired.dev]
 gem 'stimulus-rails'
+gem 'timezone', '~> 1.3', '>= 1.3.23'
 # Hotwire's SPA-like page accelerator [https://turbo.hotwired.dev]
 gem 'turbo-rails'
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
