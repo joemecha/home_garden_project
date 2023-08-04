@@ -3,7 +3,7 @@ FactoryBot.define do
     name { Faker::Name.name }
     email { Faker::Internet.email }
     password { Faker::Internet.password(min_length: 8, max_length: 20, mix_case: true, special_characters: true) }
-    zip_code { Faker::Address.zip_code }
+    zip_code { Faker::Address.zip_code[0..4] }
     time_zone { Faker::Address.time_zone }
 
     factory :user_with_gardens do
