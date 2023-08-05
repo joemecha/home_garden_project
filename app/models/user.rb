@@ -25,9 +25,11 @@ class User < ApplicationRecord
     
     coordinates = Geocoder.coordinates(zip_code)
     
-    if coordinates.present?
+    if coordinates
       time_zone = Timezone.lookup(coordinates[0], coordinates[1])
       self.time_zone = time_zone.name if time_zone.present?
+      puts "Coordinates: #{coordinates}"
+      puts "Time zone: #{self.time_zone}"
     end
   end
 end

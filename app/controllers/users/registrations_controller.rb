@@ -11,7 +11,9 @@ class Users::RegistrationsController < Devise::RegistrationsController
     if resource.save
       render json: {
         status: { code: 200, message: 'Signed up successfully.' },
-        data: UserSerializer.new(resource).serializable_hash[:data][:attributes]
+        data: {
+          user: UserSerializer.new(resource).serializable_hash[:data][:attributes]
+        }
       }
     else
       clean_up_passwords resource
