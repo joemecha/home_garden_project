@@ -15,9 +15,9 @@ RSpec.describe Users::SessionsController, type: :request do
     context 'when user is logged in' do
       it 'logs out successfully' do
         post '/login', params: valid_login_params, headers: { 'Content-Type': 'application/json' }
-        token = JSON.parse(response.body)['token']
+        token = headers['Authorization']
 
-        delete '/logout', headers: { 'Authorization': "Bearer #{token}" }
+        delete '/logout', headers: { 'Authorization': token }
 
         expect(response).to be_successful
         expect(response.status).to eq(200)
