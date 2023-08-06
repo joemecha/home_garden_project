@@ -18,7 +18,7 @@ RSpec.describe User do
     end
 
     it 'sets time zone based on zip code when zip code is present' do
-      skip 
+      skip
 
       test_zip_code = '94102'
 
