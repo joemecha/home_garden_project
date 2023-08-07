@@ -1,5 +1,4 @@
 require 'rails_helper'
-require 'webmock/rspec'
 
 RSpec.describe Users::SessionsController, type: :request do
   let(:user) { create(:user, email: 'test@example.com', password: 'password') }
