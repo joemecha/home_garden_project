@@ -1,5 +1,4 @@
 require 'rails_helper'
-require 'webmock/rspec'
 
 RSpec.describe Users::SessionsController, type: :request do
   let(:user) { create(:user, email: 'test@example.com', password: 'password') }
@@ -10,11 +9,6 @@ RSpec.describe Users::SessionsController, type: :request do
         password: 'password'
       }
     }.to_json
-  end
-
-  before do
-    stub_request(:any, /api.geonames.org/).to_return(status: 200, body: '{"timezoneId": "America/New_York"}')
-    allow(Geocoder).to receive(:coordinates).and_return([40.7128, -74.0060])
   end
 
   describe 'POST /login' do
@@ -29,7 +23,6 @@ RSpec.describe Users::SessionsController, type: :request do
         expect(login_response[:data][:user][:email]).to eq(user.email)
         expect(login_response[:status][:message]).to eq('Logged in successfully.')
         expect(login_response[:status][:code]).to eq(200)
-        # Add more expectations for other attributes as needed
       end
     end
 

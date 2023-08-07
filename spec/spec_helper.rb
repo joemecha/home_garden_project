@@ -1,26 +1,4 @@
-require 'webmock/rspec'
-
 RSpec.configure do |config|
-  config.before(:each) do
-    stub_request(:get, /https:\/\/www.mapquestapi.com\/geocoding\/v1\/address/).to_return(status: 200, headers: {}, body: 
-      <<~JSON
-        {
-          "results": [
-            {
-              "locations": [
-                {
-                  "latLng": {
-                    "lat": %{latitude},
-                    "lng": %{longitude}
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      JSON
-    )
-  end
   # rspec-expectations config goes here. You can use an alternate
   # assertion/expectation library such as wrong or the stdlib/minitest
   # assertions if you prefer.
