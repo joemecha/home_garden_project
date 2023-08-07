@@ -14,19 +14,19 @@ class User < ApplicationRecord
             length: { minimum: 8 },
             format: { with: URI::MailTo::EMAIL_REGEXP }
   
-  before_validation :set_time_zone_from_zip_code, on: :create
+  # before_validation :set_time_zone_from_zip_code, on: :create
   validates :zip_code, presence: true, format: { with: /\A\d{5}\z/, message: "should be a valid US zip code" }
 
   private
 
-  def set_time_zone_from_zip_code
-    return unless zip_code.present?
+  # def set_time_zone_from_zip_code
+  #   return unless zip_code.present?
 
-    coordinates = Geocoder.coordinates(zip_code) # models/user_spec.rb:20 fails here: undefined method `[]' for nil:NilClass
+  #   coordinates = Geocoder.coordinates(zip_code) # models/user_spec.rb:20 fails here: undefined method `[]' for nil:NilClass
     
-    if coordinates
-      time_zone = Timezone.lookup(coordinates[0], coordinates[1])
-      self.time_zone = time_zone.name if time_zone.present?
-    end
-  end
+  #   if coordinates
+  #     time_zone = Timezone.lookup(coordinates[0], coordinates[1])
+  #     self.time_zone = time_zone.name if time_zone.present?
+  #   end
+  # end
 end

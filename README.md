@@ -29,7 +29,7 @@ Home Garden Project is a RESTful back-end API which exposes data on Gardens, Loc
     2. Login to authenticate and generate a token
     3. Logout causes the token to be revoked
 
-  - Geocoder and the Timezone gem are leveraged to provide seamless time zone detection for users and ensures precise data about crop harvest timing based on their geographic location. Geocoder simplifies the process by converting user-provided zip codes into latitude and longitude coordinates, while the Timezone gem leverages Geonames to accurately identify time zones based on the obtained coordinates.
+  - ~~Geocoder and the Timezone gem are leveraged to provide seamless time zone detection for users and ensures precise data about crop harvest timing based on their geographic location. Geocoder simplifies the process by converting user-provided zip codes into latitude and longitude coordinates, while the Timezone gem leverages Geonames to accurately identify time zones based on the obtained coordinates.~~
 
 
 ## Development Notes:
@@ -68,7 +68,7 @@ Next steps:
   1. Get a copy of this repository
   2. Install gem packages by running `bundle`
   3. Setup the database: `rails db:(drop,create,migrate,seed)` or `rails db:setup`
-  4. Set up Geocoder with MapQuest
+  4. ~~Set up Geocoder with MapQuest
     A. Sign up for a MapQuest API key:
     B. Go to the MapQuest Developer Portal (https://developer.mapquest.com/plan_purchase/steps/business_edition/business_edition_free/register)
     C. Create an account or log in if you already have one.
@@ -77,7 +77,7 @@ Next steps:
   5. Set up Timezone gem with Geonames
     A. Sign up for a Geonames username - go to the Geonames website (https://www.geonames.org/login) and sign up for a free account.
     B. Enable Geonames web services - after logging in, go to https://www.geonames.org/manageaccount and ensure that the "Free Web Services" option is checked.
-    C. Add ```YOUR_GEONAMES_USERNAME=<your_geonames_username>``` to your .env file
+    C. Add ```YOUR_GEONAMES_USERNAME=<your_geonames_username>``` to your .env file~~
 
   6. Run command `rails routes` to view available routes
   7. Run command `rails s` and navigate to http://localhost:3000 to consume API endpoints below
@@ -95,20 +95,15 @@ The following are all API endpoints. Note, some endpoints have optional or requi
 
 ~ All endpoints run off base connector http://localhost:3000 ~ 
 
-__For endpoints other than create new user, send the api_key in the request body or as a query param. Examples:__
-```
-{
-    "api_key": "a02a9fc29934a6c173aa924961403005"
-}
-```
-```
-/api/v0/gardens?api_key=a02a9fc29934a6c173aa924961403005
-```
 
 ### 0 Create new user:
 | Method   | URI                                      | Description                              |
 | -------- | ---------------------------------------- | ---------------------------------------- |
-| `POST`    | `/api/v0/users`     | Register new user and receive API KEY  |
+| `POST`    | `/signup`     | Register new user  |
+### 0 Login user:
+| Method   | URI                                      | Description                              |
+| -------- | ---------------------------------------- | ---------------------------------------- |
+| `POST`    | `/login`     | Register new user  |
 
 
 ### 1 Retrieve all gardens:
@@ -154,8 +149,9 @@ Accept: application/json
 ```json
 {
   "name": "Josh",
-  "email": "testtesttest@test.com",
+  "email": "test@test.com",
   "password": "mypassword",
+  "zipcode": "80302"
 }
 ```
 _Response_
@@ -168,7 +164,7 @@ _Response_
     "data": {
         "id": 1,
         "name": "Josh",
-        "email": "testtesttest@test.com"
+        "email": "test@test.com"
     }
 }
 ```
@@ -182,7 +178,7 @@ Accept: application/json
 
 ```json
 {
-  "email": "testtesttest@test.com",
+  "email": "test@test.com",
   "password": "mypassword"
 }
 ```
@@ -196,7 +192,7 @@ _Response_
             "user": {
                 "id": 1,
                 "name": "Josh",
-                "email": "testtesttest@test.com"
+                "email": "test@test.com"
             }
         }
     }
