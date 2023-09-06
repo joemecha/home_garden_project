@@ -68,7 +68,9 @@ Next steps:
   1. Get a copy of this repository
   2. Install gem packages by running `bundle`
   3. Setup the database: `rails db:(drop,create,migrate,seed)` or `rails db:setup`
-  4. ~~Set up Geocoder with MapQuest
+  4. Run ```bundle exec rake rswag:specs:swaggerize``` to generate the API documentation
+  5. 
+  <!-- 4. ~~Set up Geocoder with MapQuest
     A. Sign up for a MapQuest API key:
     B. Go to the MapQuest Developer Portal (https://developer.mapquest.com/plan_purchase/steps/business_edition/business_edition_free/register)
     C. Create an account or log in if you already have one.
@@ -77,7 +79,7 @@ Next steps:
   5. Set up Timezone gem with Geonames
     A. Sign up for a Geonames username - go to the Geonames website (https://www.geonames.org/login) and sign up for a free account.
     B. Enable Geonames web services - after logging in, go to https://www.geonames.org/manageaccount and ensure that the "Free Web Services" option is checked.
-    C. Add ```YOUR_GEONAMES_USERNAME=<your_geonames_username>``` to your .env file~~
+    C. Add ```YOUR_GEONAMES_USERNAME=<your_geonames_username>``` to your .env file~~ --> -->
 
   6. Run command `rails routes` to view available routes
   7. Run command `rails s` and navigate to http://localhost:3000 to consume API endpoints below

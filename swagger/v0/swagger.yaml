@@ -1,0 +1,45 @@
+---
+openapi: 3.0.1
+info:
+  title: API V0
+  version: v0
+paths:
+  "/api/v0/gardens":
+    post:
+      summary: Creates a garden
+      tags:
+      - Gardens
+      parameters: []
+      responses:
+        '201':
+          description: garden created
+        '400':
+          description: bad request
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    errors:
+                    - Name can't be blank
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                size:
+                  type: number
+                user_id:
+                  type: integer
+              required:
+              - name
+              - size
+              - user_id
+servers:
+- url: https://{defaultHost}
+  variables:
+    defaultHost:
+      default: www.example.com

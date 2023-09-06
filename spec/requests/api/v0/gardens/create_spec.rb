@@ -13,7 +13,7 @@ RSpec.describe 'Gardens Create Endpoint', type: :request do
     @headers_with_token = headers
   end
 
-  describe 'POST /api/v0/gardens', swagger_doc: 'v1/swagger.json' do
+  describe 'POST /api/v0/gardens', swagger_doc: 'v0/swagger.json' do
     context 'Happy Path' do
       it 'creates a new garden' do
         headers = {"Content-Type": "application/json"}

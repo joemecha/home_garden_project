@@ -23,7 +23,7 @@
 #       end
 
 #       response '400', 'bad request' do
-#         let(:garden) { { name: 'foo' } } # Omitting user_id to trigger the 400 response
+#         let(:garden) { { name: 'foo' } }
 
 #         examples 'application/json': {
 #           errors: ['Name can\'t be blank']
